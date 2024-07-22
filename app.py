@@ -3,10 +3,17 @@ from flask_restful import Api, Resource
 from flasgger import Swagger
 
 import book_review
+import wordle_solver
 
 app = Flask(__name__)
 api = Api(app)
-swagger = Swagger(app)
+swagger = Swagger(app, template={
+    "info": {
+        "title": "API",
+        "description": "Just some fun things",
+        "version": "0.0.1"
+    }
+})
 
 class UppercaseText(Resource):
     def get(self):
@@ -134,7 +141,13 @@ class GetBestWords(Resource):
         ---
         tags:
         - Wordle solver
-    
+        parameters:
+            - name: count
+              in: query
+              type: integer
+              required: false
+              description: The number of words to return, Max 50
+              default : 15
         responses:
             200:
                 description: A successful GET request
@@ -151,12 +164,16 @@ class GetBestWords(Resource):
                                         description: The word and its score
                                     
         """
-        return {"message": "Record added successfully"}, 200
+
+        count = int(request.args.get('count'))
+        
+        words = wordle_solver.get_best_words(count)
+        return {"success": True, "data":{"words":words}}, 200
 
 
-api.add_resource(AddRecord, "/add-record")
-api.add_resource(Records, "/records")
-api.add_resource(UppercaseText, "/uppercase")
+#api.add_resource(AddRecord, "/add-record")
+#api.add_resource(Records, "/records")
+#api.add_resource(UppercaseText, "/uppercase")
 api.add_resource(GetBestWords, "/wordle-solver/bestwords")
 
 if __name__ == "__main__":
