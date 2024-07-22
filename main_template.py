@@ -10,7 +10,7 @@ class UppercaseText(Resource):
 
     def get(self):
         """
-        This method responds to the GET request for this endpoint and returns the data in uppercase.
+        This x method responds to the GET request for this endpoint and returns the data in uppercase.
         ---
         tags:
         - Text Processing
@@ -36,7 +36,7 @@ class UppercaseText(Resource):
 
         return jsonify({"text": text.upper()})
 
-api.add_resource(UppercaseText, "/uppercase")
+api.add_resource(UppercaseText, "/uppercase/words")
 
 if __name__ == "__main__":
     app.run(debug=True)

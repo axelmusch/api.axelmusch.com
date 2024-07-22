@@ -127,11 +127,37 @@ class AddRecord(Resource):
         else:
             return {"message": "Failed to add record"}, 500
         
+class GetBestWords(Resource):
+    def get(self):
+        """
+        This method responds to the GET request for returning a list of the best words.
+        ---
+        tags:
+        - Wordle solver
+    
+        responses:
+            200:
+                description: A successful GET request
+                schema:
+                    type: object
+                    properties:
+                        words:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    word:
+                                        type: number
+                                        description: The word and its score
+                                    
+        """
+        return {"message": "Record added successfully"}, 200
 
 
 api.add_resource(AddRecord, "/add-record")
 api.add_resource(Records, "/records")
 api.add_resource(UppercaseText, "/uppercase")
+api.add_resource(GetBestWords, "/wordle-solver/bestwords")
 
 if __name__ == "__main__":
     app.run(debug=True)
