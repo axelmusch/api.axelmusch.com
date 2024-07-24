@@ -5,7 +5,6 @@ from flasgger import Swagger
 from api_functions import api_response
 import wordle_solver
 
-
 app:Flask = Flask(__name__)
 api = Api(app)
 swagger = Swagger(app, template={
@@ -15,6 +14,10 @@ swagger = Swagger(app, template={
         "version": "0.0.1"
     }
 })
+
+headers = app.request.headers
+bearer = headers.get('Authorization')
+token = bearer.split()[1]
 
 class UppercaseText(Resource):
     def get(self):
