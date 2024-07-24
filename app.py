@@ -104,15 +104,11 @@ class GetBestWords(Resource):
 
         count:int = int(request.args.get('count'))
         if not (count<50 and count>0):
-            #return {"success": False, "error":"count has to be a positive integer between 0 and 50"}, 400
             return api_response(False,{"error":"count has to be a positive integer between 0 and 50"},400)
 
         words:list[dict] = wordle_solver.get_best_words(count)
-        #return {"success": True, "data":{"words":words}}, 200
         return api_response(True,{"words":words},200)
 
-
-#api.add_resource(UppercaseText, "/uppercase")
 api.add_resource(GetBestWords, "/wordle-solver/bestwords")
 
 if __name__ == "__main__":
