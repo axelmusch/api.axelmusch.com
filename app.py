@@ -15,9 +15,9 @@ swagger = Swagger(app, template={
     }
 })
 
-headers = app.request.headers
+""" headers = api.request.headers
 bearer = headers.get('Authorization')
-token = bearer.split()[1]
+token = bearer.split()[1] """
 
 class UppercaseText(Resource):
     def get(self):
@@ -111,8 +111,86 @@ class GetBestWords(Resource):
 
         words:list[dict] = wordle_solver.get_best_words(count)
         return api_response(True,{"words":words},200)
+    
+class GetNextGuess(Resource):
+    def post(self):
+        """
+        This method responds to the POST request for returning a list of best next guesses.
+        ---
+        tags:
+        - Wordle solver
+        parameters:
+            - in: body
+              name: body
+              required: true
+              schema:
+                id: guesses
+                required:
+                  - guess
+                properties:
+                  guesses:
+                    type: array
+                    description: An array of guesses and their pattern
+                    items:
+                        type: object
+                        properties:
+                            soare:
+                                type: string
+                                description: The word and its pattern
+                                example: "00202"
+                            aware:
+                                type: string
+                                description: The word and its pattern
+                                example: "01202"
+                  
+        responses:
+            200:
+                description: A successful POST request
+                schema:
+                    type: object
+                    properties:
+                        success:
+                            type: boolean
+                        data:
+                            type: object
+                            properties:
+                                words:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            soare:
+                                                type: number
+                                                description: The word and its score
+                                                example: 5.885960110378863
+                                        type: object
+                                        properties:
+                                            carte:
+                                                type: number
+                                                description: The word and its score
+                                                example: 5.794557247295705
+            400:
+                description: An unsuccessful POST request
+                schema:
+                    type: object
+                    properties:
+                        success:
+                            type: boolean
+                        data:
+                            type: object
+                            properties:
+                                error:
+                                    type: string
+                                    description: Error
+                                    example: Invalid guesses format
+                                    
+        """
+        data = request.json
+       #TODO: put data in function and get actual words
+        return api_response(True,data,200)
 
 api.add_resource(GetBestWords, "/wordle-solver/bestwords")
+api.add_resource(GetNextGuess, "/wordle-solver/nextguess")
 
 if __name__ == "__main__":
     app.run(debug=True)
