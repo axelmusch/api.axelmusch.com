@@ -129,20 +129,16 @@ class GetNextGuess(Resource):
                   - guess
                 properties:
                   guesses:
-                    type: array
-                    description: An array of guesses and their pattern
-                    items:
-                        type: object
-                        properties:
-                            soare:
-                                type: string
-                                description: The word and its pattern
-                                example: "00202"
-                            aware:
-                                type: string
-                                description: The word and its pattern
-                                example: "01202"
-                  
+                    type: object
+                    properties:
+                        soare:
+                            type: string
+                            description: The word and its pattern
+                            example: "00202"
+                        aware:
+                            type: string
+                            description: The word and its pattern
+                            example: "01202"
         responses:
             200:
                 description: A successful POST request
@@ -186,7 +182,9 @@ class GetNextGuess(Resource):
                                     
         """
         data = request.json
+        data = wordle_solver.get_next_best_guess(data['guesses'])
        #TODO: put data in function and get actual words
+       
         return api_response(True,data,200)
 
 api.add_resource(GetBestWords, "/wordle-solver/bestwords")
